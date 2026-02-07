@@ -1,6 +1,6 @@
-NAME	=fractol
+NAME	= fractol
 
-SRC	=
+SRC	= test.c
 
 GNL	= getNextLine/get_next_line.c getNextLine/get_next_line_utils.c
 
@@ -13,35 +13,35 @@ RM	= rm -f
 
 MLX_DIR	= ./minilibx-linux
 MLX_LIB	= ${MLX_DIR}/libmlx.a
-MLX_LDFLAGS	= -L${MLX_DIR} -lmlx -lXext -lX11 -lm -lz
+MLX_LDFLAGS = -L${MLX_DIR} -lmlx -lXext -lX11 -lm -lz
 
-PRINTF_DIR	= ./printf
-PRINTF_LIB	= ${PRINTF_LIB} -lmlx -lXext -lX11 -lm -lz
+PRINTF_DIR	= printf
+PRINTF_LIB	= ${PRINTF_DIR}/libftprintf.a
+GNL_DIR	= getNexLine
 
-GNL_DIR	= ./getNexLine
-
-INCS	= -I ${MLX_DIR} ${PRINTF_DIR} ${GNL_DIR} 
+INCS	= -I ${MLX_DIR} -I ${PRINTF_DIR} -I ${GNL_DIR} 
 .c.o:
-	$(CC) $(CFLAGS) -c $< -o $@ ${INCS}
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): ${MLX_DIR} ${PRINTF_DIR} ${OBJS}
 		${CC} ${CFLAGS} ${OBJS} ${MLX_LDFLAGS} ${PRINTF_LIB} -o ${NAME}
-${MLX_LIB}
-	${MAKE} -C ${MLX_DIR}
+${MLX_LIB}:
+	make -C ${MLX_DIR}
+
 ${PRINTF_LIB}:
-	${MAKE} -C ${PRINTF_DIR}
+	make -C ${PRINTF_DIR} 
 
 all	: $(NAME)
 
 clean:
 	${RM} ${OBJS}
 	${RM} getNextLine/*.o
-	${MAKE} -C ${MLX_DIR} clean
-	${MAKE} -C ${PRINTF_LIB} clean
+	make -C ${MLX_DIR} clean
+	make -C ${PRINTF_DIR} clean
 
 fclean:
 	${RM} ${NAME}
-	${MAKE} -C ${PRINTF_DIR} fclean
+	make -C ${PRINTF_DIR} fclean
 
 re: fclean all
 
