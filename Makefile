@@ -1,25 +1,22 @@
 NAME	= fractol
 
-SRC	= test.c
+SRC	= ./src/main.c ./src/controle.c ./src/complexe.c ./src/fractol.c 
 
-GNL	= getNextLine/get_next_line.c getNextLine/get_next_line_utils.c
-
-OBJS	= ${SRC:.c=.o} ${GNL:.c=.o}
+OBJS	= ${SRC:.c=.o} 
 
 CC	= cc
 CFLAGS	= -Wall -Wextra -Werror
 
 RM	= rm -f
 
-MLX_DIR	= ./minilibx-linux
+MLX_DIR	= ./includes/minilibx-linux
 MLX_LIB	= ${MLX_DIR}/libmlx.a
 MLX_LDFLAGS = -L${MLX_DIR} -lmlx -lXext -lX11 -lm -lz
 
-PRINTF_DIR	= printf
+PRINTF_DIR	= ./includes/printf
 PRINTF_LIB	= ${PRINTF_DIR}/libftprintf.a
-GNL_DIR	= getNexLine
 
-INCS	= -I ${MLX_DIR} -I ${PRINTF_DIR} -I ${GNL_DIR} 
+INCS	= -I ${MLX_DIR} -I ${PRINTF_DIR} 
 .c.o:
 	$(CC) $(CFLAGS) -c $< -o $@
 
