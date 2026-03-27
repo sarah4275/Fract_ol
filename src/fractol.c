@@ -19,6 +19,7 @@ int draw_fractal(t_data *data, char *query, double cx, double cy)
         close_window(data);
         return (0);
     }
+    
     pixel_y = 0;
     while (pixel_y < data->h)
     {
@@ -33,6 +34,15 @@ int draw_fractal(t_data *data, char *query, double cx, double cy)
     }
     mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img_ptr, 0,0);
     return (0);
+}
+void redraw_current_fractal(t_data *data)
+{
+    if (data->current_fractal == MANDELBROT)
+        draw_fractal(data, "mandelbrot", 0, 0);
+    else if (data->current_fractal == JULIA)
+        draw_fractal(data, "julia", data->julia_cx, data->julia_cy);
+    else if (data->current_fractal == BURNING_SHIP)
+        draw_fractal(data, "burning_ship", 0, 0);
 }
 /*int draw_fractal(t_data *data, char *query, double cx, double cy)
 {
@@ -87,17 +97,16 @@ int draw_fractal(t_data *data, char *query, double cx, double cy)
 
 void calculate_mandelbrot(t_data *data, enum fractal_type ftype, t_complex c, int pixel_x, int pixel_y, double cx, double cy)
 {
-    int max_iter;
+
     int i;
     t_complex z;
     
     i = 0;
-    max_iter = 20;
     if (ftype == MANDELBROT)
     {
         z.re = 0;
         z.im = 0;
-        while (module_complex(z) < 4.0 && i < max_iter)
+        while (module_complex(z) < 4.0 && i < MAX_ITER)
         {
             z = suite_complexe(z, c);
             i++;
@@ -109,7 +118,7 @@ void calculate_mandelbrot(t_data *data, enum fractal_type ftype, t_complex c, in
         t_complex julia_constant;
         julia_constant.re = cx;
         julia_constant.im = cy;
-        while (module_complex(z) < 4.0 && i < max_iter)
+        while (module_complex(z) < 4.0 && i <  MAX_ITER)
         {
             z = suite_complexe(z, julia_constant);
             i++;
@@ -119,13 +128,13 @@ void calculate_mandelbrot(t_data *data, enum fractal_type ftype, t_complex c, in
     else if (ftype == BURNING_SHIP)
     {
         z = c;
-        while (module_complex(z) < 4.0 && i < max_iter)
+        while (module_complex(z) < 4.0 && i <  MAX_ITER)
         {
             z = suite_complexebu(z, c);
             i++;
         }
     }
-    if ( i == max_iter)
+    if ( i == MAX_ITER)
     put_color_to_pixel(data, pixel_x, pixel_y, 0x000000);
     else
     put_color_to_pixel(data, pixel_x, pixel_y, (data->color *i));
